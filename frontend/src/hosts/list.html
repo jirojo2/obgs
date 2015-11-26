@@ -5,12 +5,12 @@
     <h2 class="panel-title">{{ getHostIP(host) }}</h2>
   </div>
   <ul class="list-group">
-    <li class="list-group-item" ng-repeat="service in host.services">
-      <p>{{ service.protocol }} {{ service.port }}</p>
-      <pre ng-if="service.banner">{{ service.banner }}</pre>
+    <li class="list-group-item" ng-repeat="port in host.ports">
+      <p>{{ port.protocol }} {{ port.port }}</p>
+      <pre ng-if="port.banner">{{ port.banner }}</pre>
     </li>
   </ul>
-  <div class="panel-body" ng-if="host.services.length == 0">
+  <div class="panel-body" ng-if="host.ports.length == 0">
     No services found
   </div>
   <div class="panel-footer">
