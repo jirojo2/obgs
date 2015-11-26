@@ -1,0 +1,19 @@
+<h1 class="page-header">Hosts</h1>
+
+<div class="panel panel-default" ng-repeat="host in hosts">
+  <div class="panel-heading">
+    <h2 class="panel-title">{{ getHostIP(host) }}</h2>
+  </div>
+  <ul class="list-group">
+    <li class="list-group-item" ng-repeat="service in host.services">
+      <p>{{ service.protocol }} {{ service.port }}</p>
+      <pre ng-if="service.banner">{{ service.banner }}</pre>
+    </li>
+  </ul>
+  <div class="panel-body" ng-if="host.services.length == 0">
+    No services found
+  </div>
+  <div class="panel-footer">
+    Scanned at {{ host.tstamp | date }}
+  </div>
+</div>
