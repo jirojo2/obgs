@@ -35,7 +35,7 @@ def processScan(scan):
                 '--banners',
                 '-oJ', '-',
                 '-p', '22,80,443',
-                '--source-dir', '192.168.1.228', # TODO: config this as settings
+                '--source-port', '60000', # TODO: config this as settings
                 scan['target']], stdout=PIPE, stderr=PIPE)
     with p.stderr:
         # example: rate:  0.10-kpps, 19.14% done,   0:00:25 remaining, found=4
