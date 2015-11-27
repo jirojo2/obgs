@@ -1,0 +1,13 @@
+[Unit]
+Description=Open Banner Grabbing System
+
+[Service]
+Type=simple
+ExecStart=/root/obgs/farmer/farmer.py
+
+[Service]
+Type=simple
+ExecStart=/root/obgs/api/server.py
+
+[Install]
+WantedBy=multi-user.target
