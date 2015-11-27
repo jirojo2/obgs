@@ -55,8 +55,18 @@ hosts = {
                 'reason': {'type': 'string'},
                 'port': {'type': 'integer'},
                 'proto': {'type': 'string'},
-                'banner': {'type': 'string'}
+                'banner': {'type': 'string'},
+                'service': {
+                    'type': 'dict',
+                    'schema': {
+                        'name': {'type': 'string'},
+                        'banner': {'type': 'string'}
+                    }
+                }
             },
+        },
+        'ip': {
+            'type': 'string'
         },
         'tstamp': {
             'type': 'datetime',
