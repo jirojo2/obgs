@@ -10,6 +10,11 @@
       <pre ng-if="port.banner">{{ port.banner }}</pre>
     </li>
   </ul>
+  <div class="panel-body" ng-if="host.ports.length > 0">
+    <span ng-repeat="port in host.ports">
+      {{ port.port }},
+    </span>
+  </div>
   <div class="panel-body" ng-if="host.ports.length == 0">
     No services found
   </div>
