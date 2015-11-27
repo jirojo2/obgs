@@ -3,7 +3,7 @@ angular.module('templates', []);
 var app = angular.module('obgs',
         [
                 'ui.router',
-                'ui.bootstrap',
+                'ngMaterial',
                 'ngResource',
                 'templates'
         ]
@@ -37,6 +37,14 @@ app.config(['$stateProvider', '$urlRouterProvider',
                 templateUrl: "scans/list.html",
                 controller: "ScanListCtrl"
             })
+    }
+])
+
+app.config(['$mdThemingProvider', '$mdIconProvider',
+    function($mdThemingProvider, $mdIconProvider){
+        $mdThemingProvider.theme('default')
+            .primaryPalette('blue')
+            .accentPalette('red');
     }
 ])
 

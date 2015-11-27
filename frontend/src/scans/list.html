@@ -1,23 +1,13 @@
-<h1 class="page-header">Scans</h1>
+<h1 class="md-primary">Scans</h1>
 
-<div class="panel panel-default" ng-repeat="scan in scans">
-  <div class="panel-heading">
-    <h2 class="panel-title">Scan {{ scan.target }}</h2>
-  </div>
-  <div class="panel-body" ng-show="!scan.finished">
-    <p><label>Target</label>: {{ scan.target }}</p>
-    <p><label>Progress</label>: {{ scan.finished ? (scan.error ? 'Fail' : 'Finished') : scan.progress*100 + '%' }}</p>
-    <p><label>Time elapsed</label>: {{ scan.time_elapsed }}</p>
-    <p ng-if="scan.time_left"><label>Time left</label>: {{ scan.time_left }}</p>
-    <p ng-if="scan.hitrate"><label>Hitrate</label>: {{ scan.hitrate * 100 }}%</p>
-  </div>
-  <div class="panel-body" ng-show="scan.error && scan.finished">
-  </div>
-  <div class="panel-body" ng-show="!scan.error && scan.finished">
+<md-card ng-repeat="scan in scans">
+  <md-card-content>
+    <h2>Scan {{ scan.target }}</h2>
     <p><label>Target</label>: {{ scan.target }}</p>
     <p><label>Hosts</label>: {{ scan.found }}</p>
-  </div>
-  <div class="panel-footer">
-    Scanned at {{ scan.tstamp | date }}
-  </div>
-</div>
+    <p>Scanned at {{ scan.tstamp | date }}</p>
+    <md-actions layout="row" layout-align="end center">
+      <md-button>TMP</md-button>
+    </md-actions>
+  </md-card-content>
+</md-card>

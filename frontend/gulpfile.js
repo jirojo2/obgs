@@ -32,12 +32,12 @@ gulp.task('styles', [], function() {
         .pipe(minifyCss({compatibility: 'ie8'}))
         .pipe(rename({suffix: ".min"}))
         .pipe(gulp.dest('public'));
-})
+});
 
-gulp.task('bootstrap', [], function() {
+gulp.task('material-style', [], function() {
     return gulp
-        .src('bower_components/bootstrap/**/*')
-        .pipe(copy('public', { prefix: 1 }))
+        .src('bower_components/angular-material/angular-material.min.css')
+        .pipe(gulp.dest('public'))
 });
 
 gulp.task('font-awesome', [], function() {
@@ -46,13 +46,15 @@ gulp.task('font-awesome', [], function() {
         .pipe(copy('public', { prefix: 1 }))
 });
 
-gulp.task('dependencies', ['font-awesome', 'bootstrap'], function() {
+gulp.task('dependencies', ['font-awesome', 'material-style'], function() {
     return gulp
         .src([
             'bower_components/angular/angular.min.js',
             'bower_components/angular-resource/angular-resource.min.js',
             'bower_components/angular-ui-router/release/angular-ui-router.min.js',
-            'bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js'
+            'bower_components/angular-aria/angular-aria.min.js',
+            'bower_components/angular-animate/angular-animate.min.js',
+            'bower_components/angular-material/angular-material.min.js'
         ])
         .pipe(concat('dependencies.min.js'))
         .pipe(gulp.dest('public'))
