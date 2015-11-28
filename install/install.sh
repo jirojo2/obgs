@@ -75,9 +75,12 @@ type systemctl
 
 if [[ $? -eq 0 ]]
 then
+	echo "Configuring obgs systemctl files ..."
+	sed -i -e 's/ExecStart=\/srv\/obgs\/farmer\/farmer.py/ExecStart=`pwd`/farmer/farmer.py/g' install/obgs-farmer.service
+	sed -i -e 's/ExecStart=\/srv\/obgs\/farmer\/server.py/ExecStart=`pwd`/farmer/server.py/g' install/obgs-api.service
 	echo "Installing obgs services for systemctl ..."
-	cp ../install/obgs-farmer.service /etc/systemd/system/
-	cp ../install/obgs-api.service /etc/systemd/system/
+	cp install/obgs-farmer.service /etc/systemd/system/
+	cp install/obgs-api.service /etc/systemd/system/
 	systemctl daemon-reload
 	read -p "Do you want to automatically start the services?" -n 1 -r
         if [[ $REPLY =~ ^[Yy]$ ]]
