@@ -2,16 +2,70 @@
 
 [ "$(id -u)" != "0" ] && echo "You must run this script as root" && exit 1
 
+
 echo "Moving into frontend folder ..."
 cd ../frontend/
-echo "Installing npm if required ..."
-apt-get install npm
+
+[ -d node_modules ] && echo "Cleaning installation folder ..." && rm -fr node_modules
+echo "Checking if npm is installed ..."
+type npm > /dev/null
+if [[ $? -eq 0 ]]
+then
+	echo "npm is installed ..."
+else
+	if [[ $(grep -c -i debian /proc/version) -gt 0 || $(grep -c -i ubuntu /proc/version) -gt 0 ]]
+	then
+		echo "Debian/Ubuntu installation detected ..."
+		read -p "Do you want to automatically install dependencies?" -n 1 -r
+		if [[ $REPLY =~ ^[Yy]$ ]]
+		then
+        		apt-get -qq install npm
+		fi
+	else
+		echo "Please install npm before continuing."
+		exit 1
+	fi
+fi
+
+echo "Fetching masscan from git ..."
+git clone https://github.com/robertdavidgraham/masscan
+echo "Building masscan ..."
+cd masscan
+make
+[[ $? != 0 ]] && echo "Error compiling masscan, please check." && exit 1
+echo "Installing masscan ..."
+make install
+echo "Cleaning up ..."
+rm -fr masscan
+
 echo "Installing bower ..."
-npm install -g bower
+npm --silent install -g bower
+
 echo "Installing ..."
-npm install && bower --allow-root install
+npm --silent install && bower --silent --allow-root install
+
 echo "Installing gulp ..."
-npm install -g gulp
+npm --silent install -g gulp
+
 echo "Executing gulp ..."
 gulp
+
+echo "Checking if systemctl is avaliable ..."
+type systemctl
+
+if [[ $? -eq 0 ]]
+then
+	echo "Installing obgs services for systemctl ..."
+	cp ../install/obgs-farmer.service /etc/systemd/system/
+	cp ../install/obgs-api.service /etc/systemd/system/
+	systemctl daemon-reload
+	read -p "Do you want to automatically start the services?" -n 1 -r
+        if [[ $REPLY =~ ^[Yy]$ ]]
+        then
+		systemctl start obgs-farmer.service obgs-api.service
+        fi
+
+else
+	echo "systemctl not found ..."
+fi
 
