@@ -38,6 +38,26 @@ make install
 echo "Cleaning up ..."
 rm -fr masscan
 
+echo "Checking if mongo-server is installed ..."
+type mongod > /dev/null
+if [[ $? -eq 0 ]]
+then
+        echo "mongo-server is installed ..."
+else
+        if [[ $(grep -c -i debian /proc/version) -gt 0 || $(grep -c -i ubuntu /proc/version) -gt$
+        then
+                echo "Debian/Ubuntu installation detected ..."
+                read -p "Do you want to automatically install dependencies?" -n 1 -r
+                if [[ $REPLY =~ ^[Yy]$ ]]
+                then
+                        apt-get -qq install mongo-server
+                fi
+        else
+                echo "Please install mongo-server before continuing."
+                exit 1
+        fi
+fi
+
 echo "Installing bower ..."
 npm --silent install -g bower
 
