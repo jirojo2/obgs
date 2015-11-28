@@ -3,12 +3,24 @@ OBGS - Open Banner Grabbing System
 
 # Installation
 
-First, install dependencies:
+First, install dependencies. For example, with a debian based system:
 
 ```bash
+$ sudo apt-get install npm nodejs-legacy mongodb-server
 $ sudo pip install eve
-$ sudo pip install pymongo
+$ sudo npm install -g bower gulp
 ```
+
+Then, we need to install `masscan` (https://github.com/robertdavidgraham/masscan)
+
+```
+$ sudo apt-get install git gcc make libpcap-dev
+$ git clone https://github.com/robertdavidgraham/masscan
+$ cd masscan
+$ make
+$ sudo make install
+```
+Reference masscan's readme for further instructions.
 
 # Frontend
 
@@ -17,6 +29,8 @@ to serve the `public` folder (see wiki for config examples)
 
 ```bash
 $ cd frontend
+$ npm install
+$ bower install
 $ gulp
 ```
 
