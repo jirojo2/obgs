@@ -5,6 +5,7 @@ MONGO_PORT = 27017
 MONGO_USERNAME = ''
 MONGO_PASSWORD = ''
 MONGO_DBNAME = 'obgs'
+MONGO_QUERY_BLACKLIST = ['$where']
 
 # Enable reads (GET), inserts (POST) and DELETE for resources/collections
 # (if you omit this line, the API will default to ['GET'] and provide
