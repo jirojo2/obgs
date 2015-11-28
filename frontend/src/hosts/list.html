@@ -1,24 +1,11 @@
-<h1 class="page-header">Hosts</h1>
+<h1 class="md-primary">Hosts</h1>
 
-<div class="panel panel-default" ng-repeat="host in hosts">
-  <div class="panel-heading">
-    <h2 class="panel-title">{{ getHostIP(host) }}</h2>
-  </div>
-  <ul class="list-group">
-    <li class="list-group-item" ng-repeat="port in host.ports">
-      <p>{{ port.protocol }} {{ port.port }}</p>
-      <pre ng-if="port.banner">{{ port.banner }}</pre>
-    </li>
-  </ul>
-  <div class="panel-body" ng-if="host.ports.length > 0">
-    <span ng-repeat="port in host.ports">
-      {{ port.port }},
-    </span>
-  </div>
-  <div class="panel-body" ng-if="host.ports.length == 0">
-    No services found
-  </div>
-  <div class="panel-footer">
+<md-card ng-repeat="host in hosts">
+  <md-card-content>
+    <h2>{{ getHostIP(host) }}</h2>
+    <pre>{{ host | json }}</pre>
+  </md-card-content>
+  <md-card-footer>
     Scanned at {{ host.tstamp | date }}
-  </div>
-</div>
+  </md-card-footer>
+</md-card>

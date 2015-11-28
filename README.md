@@ -3,12 +3,31 @@ OBGS - Open Banner Grabbing System
 
 # Installation
 
-First, install dependencies:
+First, install dependencies. For example, with a debian based system:
 
 ```bash
+$ sudo apt-get install npm nodejs-legacy mongodb-server
 $ sudo pip install eve
-$ sudo pip install pymongo
-$ sudo pip install redis
+$ sudo npm install -g bower gulp
+```
+
+Then, we need to install [masscan](https://github.com/robertdavidgraham/masscan)
+
+```
+$ sudo apt-get install git gcc make libpcap-dev
+$ git clone https://github.com/robertdavidgraham/masscan
+$ cd masscan
+$ make
+$ sudo make install
+```
+Reference masscan's readme for further instructions.
+
+When deploying in a server, if `systemd` is available:
+```
+$ sudo cp install/obgs-farmer.service /etc/systemd/system/
+$ sudo cp install/obgs-api.service /etc/systemd/system/
+$ sudo systemctl daemon-reload
+$ sudo systemctl start obgs-farmer.service obgs-api.service
 ```
 
 # Frontend
@@ -18,16 +37,18 @@ to serve the `public` folder (see wiki for config examples)
 
 ```bash
 $ cd frontend
+$ npm install
+$ bower install
 $ gulp
 ```
 
 # API
 
-Run `server.py`, until a proper service method (systemd) is prepared.
-
 Edit `settings.py` to match the MongoDB settings and the data schema.
+
+Use systemd service to control the api service, or run manually `api/server.py`.
 
 # Farmer
 
-Run `farmer.py` module, until a proper service method (systemd) is prepared.
+Use systemd service to control the farmer service, or run manually `farmer/farmer.py`.
 

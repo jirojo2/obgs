@@ -16,6 +16,10 @@ angular.module('obgs')
 .controller('HostListCtrl', ['$scope', 'Host',
     function($scope, Host) {
         $scope.hosts = Host.query();
+        $scope.filter = {};
+
+        // /api/hosts?where={"ports.service.name":"X509"}
+        // /api/hosts?where={"ports.service.banner":{"$regex":"SSH"}}
 
         $scope.getHostIP = function(host) {
             var ip = host._id
