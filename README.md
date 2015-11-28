@@ -22,6 +22,14 @@ $ sudo make install
 ```
 Reference masscan's readme for further instructions.
 
+When deploying in a server, if `systemd` is available:
+```
+$ sudo cp install/obgs-farmer.service /etc/systemd/system/
+$ sudo cp install/obgs-api.service /etc/systemd/system/
+$ sudo systemctl daemon-reload
+$ sudo systemctl start obgs-farmer.service obgs-api.service
+```
+
 # Frontend
 
 Use `gulp` to compile the frontend, and setup apache/nginx
@@ -36,11 +44,11 @@ $ gulp
 
 # API
 
-Run `server.py`, until a proper service method (systemd) is prepared.
-
 Edit `settings.py` to match the MongoDB settings and the data schema.
+
+Use systemd service to control the api service, or run manually `api/server.py`.
 
 # Farmer
 
-Run `farmer.py` module, until a proper service method (systemd) is prepared.
+Use systemd service to control the farmer service, or run manually `farmer/farmer.py`.
 
