@@ -11,7 +11,7 @@ $ sudo pip install eve
 $ sudo npm install -g bower gulp
 ```
 
-Then, we need to install `masscan` (https://github.com/robertdavidgraham/masscan)
+Then, we need to install [masscan](https://github.com/robertdavidgraham/masscan)
 
 ```
 $ sudo apt-get install git gcc make libpcap-dev
