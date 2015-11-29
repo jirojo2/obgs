@@ -13,8 +13,19 @@ angular.module('obgs')
         });
     }
 ])
-.controller('ScanListCtrl', ['$scope', 'Scan',
+.controller('ScanListCtrl', ['$scope', '$timeout', 'Scan',
     function($scope, Scan) {
         $scope.scans = Scan.query();
+        $scope.scan = new Scan({
+            tstamp: new Date(),
+            finished: false,
+            launched: false,
+            ports: '22,80,443'
+        });
+
+        $scope.launchScan = function(scan) {
+            scan.tstamp = new Date();
+            scan.$save();
+        }
     }
 ])

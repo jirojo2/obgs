@@ -4,10 +4,30 @@
   <md-card-content>
     <h2>Scan {{ scan.target }}</h2>
     <p><label>Target</label>: {{ scan.target }}</p>
+    <p ng-show="!scan.finished">
+      <label>Progress</label>: {{ scan.progress }}%
+    </p>
+    <p ng-show="!scan.finished">
+      <label>Estimated time left</label>: {{ scan.remaining }}
+    </p>
     <p><label>Hosts</label>: {{ scan.found }}</p>
     <p>Scanned at {{ scan.tstamp | date }}</p>
-    <md-actions layout="row" layout-align="end center">
-      <md-button>TMP</md-button>
-    </md-actions>
+  </md-card-content>
+</md-card>
+
+<md-card ng-repeat="scan in scans">
+  <md-card-content>
+    <h2>Launch scan</h2>
+    <form ng-submit="launchScan(scan)">
+      <md-input-container class="md-block">
+        <label>Network Target</label>
+        <input md-maxlength="30" required name="target" ng-model="scan.target">
+      </md-input-container>
+      <md-input-container class="md-block">
+        <label>Ports</label>
+        <input md-maxlength="30" required name="target" ng-model="scan.ports">
+      </md-input-container>
+      <md-button>Launch scan</md-button>
+    </form>
   </md-card-content>
 </md-card>
