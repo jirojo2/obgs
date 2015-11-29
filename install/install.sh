@@ -27,6 +27,27 @@ else
 	fi
 fi
 
+echo "Checking if nginx is installed ..."
+type nginx > /dev/null
+if [[ $? -eq 0 ]]
+then
+        echo "nginx is installed ..."
+else
+        if [[ $(grep -c -i debian /proc/version) -gt 0 || $(grep -c -i ubuntu /proc/version) -gt 0 ]]
+        then
+                echo "Debian/Ubuntu installation detected ..."
+                read -p "Do you want to automatically install dependencies?" -n 1 -r
+                if [[ $REPLY =~ ^[Yy]$ ]]
+                then
+                        apt-get -qq install nginx
+                fi
+        else
+                echo "Please install nginx before continuing."
+                exit 1
+        fi
+fi
+
+
 echo "Fetching masscan from git ..."
 git clone https://github.com/robertdavidgraham/masscan
 echo "Building masscan ..."
