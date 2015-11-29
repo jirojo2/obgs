@@ -16,6 +16,7 @@ First, install dependencies. For example, with a debian based system:
 ```bash
 $ sudo apt-get install npm nodejs-legacy mongodb-server nginx
 $ sudo pip install eve
+$ pip install pymongo==2.8.1
 $ sudo npm install -g bower gulp
 ```
 
@@ -27,6 +28,11 @@ $ git clone https://github.com/robertdavidgraham/masscan
 $ cd masscan
 $ make
 $ sudo make install
+```
+
+We need to add a iptables filter to grab the banners
+```
+iptables -A INPUT -p tcp --dport 60000 -j DROP
 ```
 Reference masscan's readme for further instructions.
 
