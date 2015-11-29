@@ -107,6 +107,9 @@ scans = {
         'remaining': {
             'type': 'string',
         },
+        'ports': {
+            'type': 'string',
+        },
         'progress': {
             'type': 'float',
         },
