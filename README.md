@@ -14,7 +14,7 @@ WARNING: This script is still under development so use it at your own risk!
 First, install dependencies. For example, with a debian based system:
 
 ```bash
-$ sudo apt-get install npm nodejs-legacy mongodb-server
+$ sudo apt-get install npm nodejs-legacy mongodb-server nginx
 $ sudo pip install eve
 $ sudo npm install -g bower gulp
 ```
