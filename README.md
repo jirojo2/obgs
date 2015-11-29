@@ -3,6 +3,14 @@ OBGS - Open Banner Grabbing System
 
 # Installation
 
+##Automatic installation
+
+There is an script under the folder install.sh that will install OBGS and its dependencies with a configuration by default.
+
+WARNING: This script is still under development so use it at your own risk!
+
+##Manual installation
+
 First, install dependencies. For example, with a debian based system:
 
 ```bash
@@ -30,7 +38,7 @@ $ sudo systemctl daemon-reload
 $ sudo systemctl start obgs-farmer.service obgs-api.service
 ```
 
-# Frontend
+### Frontend
 
 Use `gulp` to compile the frontend, and setup apache/nginx
 to serve the `public` folder (see wiki for config examples)
@@ -42,13 +50,13 @@ $ bower install
 $ gulp
 ```
 
-# API
+### API
 
 Edit `settings.py` to match the MongoDB settings and the data schema.
 
 Use systemd service to control the api service, or run manually `api/server.py`.
 
-# Farmer
+### Farmer
 
 Use systemd service to control the farmer service, or run manually `farmer/farmer.py`.
 
