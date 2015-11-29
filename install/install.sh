@@ -91,6 +91,16 @@ npm --silent install -g gulp
 echo "Executing gulp ..."
 gulp
 
+echo "Configuring nginx ..."
+cp default /etc/nginx/sites-avaliable/
+ln -s /etc/nginx/sites-enabled/default
+if [[ -f /etc/init.d/nginx ]]
+then
+	/etc/init.d/nginx restart
+else
+	systemctl restart nginx.service
+fi
+
 echo "Checking if systemctl is avaliable ..."
 type systemctl
 
