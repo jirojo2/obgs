@@ -1,0 +1,11 @@
+server {
+    listen 80;
+
+    root /srv/obgs/frontend/public;
+    index index.html;
+
+    location /api/ {
+        proxy_pass http://localhost:5000/;
+    }
+}
+
