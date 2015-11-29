@@ -116,6 +116,9 @@ scans = {
         'finished': {
             'type': 'boolean',
         },
+        'launched': {
+            'type': 'boolean',
+        },
         'error': {
             'type': 'boolean',
         },

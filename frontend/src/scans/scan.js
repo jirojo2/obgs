@@ -24,7 +24,7 @@ angular.module('obgs')
         });
 
         $scope.launchScan = function(scan) {
-            scan.tstamp = new Date();
+            scan.tstamp = new Date().toUTCString();
             scan.$save();
 
             // refresh scans
