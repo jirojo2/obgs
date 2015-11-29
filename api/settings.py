@@ -89,6 +89,8 @@ scans = {
     #    'field': 'lastname'
     #},
 
+    'resource_methods': ['GET', 'POST'],
+
     # We choose to override global cache-control directives for this resource.
     'cache_control': 'max-age=10,must-revalidate',
     'cache_expires': 10,
