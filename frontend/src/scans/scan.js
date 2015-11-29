@@ -26,6 +26,9 @@ angular.module('obgs')
         $scope.launchScan = function(scan) {
             scan.tstamp = new Date();
             scan.$save();
+
+            // refresh scans
+            $scope.scans = Scan.query();
         }
     }
 ])

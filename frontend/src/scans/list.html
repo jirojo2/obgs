@@ -21,11 +21,11 @@
     <form ng-submit="launchScan(scan)">
       <md-input-container class="md-block">
         <label>Network Target</label>
-        <input md-maxlength="30" required name="target" ng-model="scan.target">
+        <input required name="target" ng-model="scan.target">
       </md-input-container>
       <md-input-container class="md-block">
         <label>Ports</label>
-        <input md-maxlength="30" required name="target" ng-model="scan.ports">
+        <input required name="ports" ng-model="scan.ports">
       </md-input-container>
       <md-button>Launch scan</md-button>
     </form>
