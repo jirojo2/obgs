@@ -74,22 +74,22 @@ def processScan(scan):
     code = p.returncode
     if code is 0:
         print("Completed scan")
-        file = open('/tmp/tmpscan.json', 'r')
-        for line in iter(file.readline, b''):
-            try:
-                # {   "ip": "192.168.1.114",   "ports": [ {"port": 80, "proto": "tcp", "status": "open", "reason": "syn-ack", "ttl": 63} ] },
-                if 'ip' not in line:
-                    continue
-                host = json.loads(line[:-2])
-                host['tstamp'] = datetime.utcnow()
-                host['_id'] = ip2int(host['ip'])
-                h = mongo.obgs.hosts.find_one({"_id": host['_id'], "tstamp": {"$gt": scan['tstamp']}})
-                if h is not None:
-                    mongo.obgs.hosts.update_one({"_id": host['_id']}, {"$push": {"ports": {"$each": host['ports']}}})
-                else:
-                    mongo.obgs.hosts.replace_one({"_id": host['_id']}, host, True)
-            except Exception as e:
-                logger.error(e)
+        with open('/tmp/tmpscan.json', 'r') as f:
+            for line in iter(f.readline, b''):
+                try:
+                    # {   "ip": "192.168.1.114",   "ports": [ {"port": 80, "proto": "tcp", "status": "open", "reason": "syn-ack", "ttl": 63} ] },
+                    if 'ip' not in line:
+                        continue
+                    host = json.loads(line[:-2])
+                    host['tstamp'] = datetime.utcnow()
+                    host['_id'] = ip2int(host['ip'])
+                    h = mongo.obgs.hosts.find_one({"_id": host['_id'], "tstamp": {"$gt": scan['tstamp']}})
+                    if h is not None:
+                        mongo.obgs.hosts.update_one({"_id": host['_id']}, {"$push": {"ports": {"$each": host['ports']}}})
+                    else:
+                        mongo.obgs.hosts.replace_one({"_id": host['_id']}, host, True)
+                except Exception as e:
+                    logger.error(e)
     else:
         print("Error in scan with code %d" % code)
         scan['error'] = True
