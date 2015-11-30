@@ -15,8 +15,8 @@ First, install dependencies. For example, with a debian based system:
 
 ```bash
 $ sudo apt-get install npm nodejs-legacy mongodb-server nginx
+$ sudo pip install pymongo==2.9.1
 $ sudo pip install eve
-$ pip install pymongo==2.9.1
 $ sudo npm install -g bower gulp
 ```
 
