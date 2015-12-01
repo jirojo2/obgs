@@ -3,7 +3,7 @@ Description=Open Banner Grabbing System
 
 [Service]
 Type=simple
-ExecStart=/srv/obgs/farmer/farmer.py
+ExecStart=/srv/obgs/farmer/farmer.py -v
 
 [Install]
 WantedBy=multi-user.target
