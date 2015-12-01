@@ -27,6 +27,23 @@ def int2ip(i):
     "Convert 32-bit integer to dotted IPv4 address."
     return ".".join(map(lambda n: str(i>>n & 0xFF), [24,16,8,0]))
 
+def processScanResult(scan, stream):
+    for line in iter(stream.readline, b''):
+        try:
+            # {   "ip": "192.168.1.114",   "ports": [ {"port": 80, "proto": "tcp", "status": "open", "reason": "syn-ack", "ttl": 63} ] },
+            if 'ip' not in line:
+                continue
+            host = json.loads(line[:-2])
+            host['tstamp'] = datetime.utcnow()
+            host['scan_id'] = scan['_id']
+            h = mongo.obgs.hosts.find_one({"scan_id": host['scan_id'], "ip": host['ip']})
+            if h is not None:
+                mongo.obgs.hosts.update_one({"_id": h['_id']}, {"$push": {"ports": {"$each": host['ports']}}})
+            else:
+                mongo.obgs.hosts.replace_one({"scan_id": host['scan_id'], "ip": host['ip']}, host, True)
+        except Exception as e:
+            logger.error(e)
+
 def processScan(scan):
     """
     Scan target with masscan for open ports, grabbing their banners
@@ -75,21 +92,7 @@ def processScan(scan):
     if code is 0:
         print("Completed scan")
         with open('/tmp/tmpscan.json', 'r') as f:
-            for line in iter(f.readline, b''):
-                try:
-                    # {   "ip": "192.168.1.114",   "ports": [ {"port": 80, "proto": "tcp", "status": "open", "reason": "syn-ack", "ttl": 63} ] },
-                    if 'ip' not in line:
-                        continue
-                    host = json.loads(line[:-2])
-                    host['tstamp'] = datetime.utcnow()
-                    host['scan_id'] = scan['_id']
-                    h = mongo.obgs.hosts.find_one({"scan_id": host['scan_id'], "ip": host['ip']})
-                    if h is not None:
-                        mongo.obgs.hosts.update_one({"_id": h['_id']}, {"$push": {"ports": {"$each": host['ports']}}})
-                    else:
-                        mongo.obgs.hosts.replace_one({"scan_id": host['scan_id'], "ip": host['ip']}, host, True)
-                except Exception as e:
-                    logger.error(e)
+            processScanResult(scan, f)
     else:
         print("Error in scan with code %d" % code)
         scan['error'] = True
@@ -119,6 +122,7 @@ def main():
     parser = argparse.ArgumentParser(prog='farmer')
     parser.add_argument('--version', action='version', version='%(prog)s ' + __version__)
     parser.add_argument('-v', action='count', help='set verbosity level')
+    parser.add_argument('--json', help='parse from JSON file')
 
     # parse arguments
     args = parser.parse_args()
@@ -131,6 +135,15 @@ def main():
 
     # init
     logger.info("listening for scans on queue")
+
+    # parse from JSON file
+    if args.json:
+        logger.info("parsing masscan results from JSON file")
+        scan = {"finished": True, "error": False, "remaining":0, "progress":100.0, "target":"file"}
+        scan['_id'] = mongo.obgs.scans.insert_one(scan).inserted_id
+        with open(args.json) as f:
+            processScanResult(scan, f)
+        return
 
     # loop!
     while True:
