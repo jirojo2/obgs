@@ -83,7 +83,7 @@ def processScan(scan):
                     host = json.loads(line[:-2])
                     host['tstamp'] = datetime.utcnow()
                     host['scan_id'] = scan['_id']
-                    h = mongo.obgs.hosts.find_one({"scan_id": host['scan_id'], "ip": host['ip'], "tstamp": {"$gt": scan['tstamp']}})
+                    h = mongo.obgs.hosts.find_one({"scan_id": host['scan_id'], "ip": host['ip']})
                     if h is not None:
                         mongo.obgs.hosts.update_one({"_id": h['_id']}, {"$push": {"ports": {"$each": host['ports']}}})
                     else:
