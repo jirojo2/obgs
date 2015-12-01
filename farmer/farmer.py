@@ -82,12 +82,12 @@ def processScan(scan):
                         continue
                     host = json.loads(line[:-2])
                     host['tstamp'] = datetime.utcnow()
-                    host['scan_id'] = scan._id
-                    h = mongo.obgs.hosts.find_one({"_id": host['_id'], "tstamp": {"$gt": scan['tstamp']}})
+                    host['scan_id'] = scan['_id']
+                    h = mongo.obgs.hosts.find_one({"scan_id": host['scan_id'], "ip": host['ip'], "tstamp": {"$gt": scan['tstamp']}})
                     if h is not None:
-                        mongo.obgs.hosts.update_one({"_id": host['_id']}, {"$push": {"ports": {"$each": host['ports']}}})
+                        mongo.obgs.hosts.update_one({"_id": h['_id']}, {"$push": {"ports": {"$each": host['ports']}}})
                     else:
-                        mongo.obgs.hosts.replace_one({"_id": host['_id']}, host, True)
+                        mongo.obgs.hosts.replace_one({"scan_id": host['scan_id'], "ip": host['ip']}, host, True)
                 except Exception as e:
                     logger.error(e)
     else:
