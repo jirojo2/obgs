@@ -2,8 +2,8 @@
 
 <md-card ng-repeat="host in hosts">
   <md-card-content>
-    <h2>{{ getHostIP(host) }}</h2>
-    <pre>{{ host | json }}</pre>
+    <h2>{{ host.ip }}</h2>
+    <pre>{{ host.ports | json }}</pre>
   </md-card-content>
   <md-card-footer>
     Scanned at {{ host.tstamp | date }}
