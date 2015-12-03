@@ -20,14 +20,5 @@ angular.module('obgs')
 
         // /api/hosts?where={"ports.service.name":"X509"}
         // /api/hosts?where={"ports.service.banner":{"$regex":"SSH"}}
-
-        $scope.getHostIP = function(host) {
-            var ip = host._id
-            var part1 = ip & 255;
-            var part2 = ((ip >> 8) & 255);
-            var part3 = ((ip >> 16) & 255);
-            var part4 = ((ip >> 24) & 255);
-            return part4 + "." + part3 + "." + part2 + "." + part1;
-        }
     }
 ])
