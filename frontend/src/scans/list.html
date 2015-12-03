@@ -13,6 +13,9 @@
     <p><label>Hosts</label>: {{ scan.found }}</p>
     <p>Scanned at {{ scan.tstamp | date }}</p>
   </md-card-content>
+  <md-card-actions layout="row" layout-align="end center">
+    <md-button ui-sref="scan.hosts({ scan_id: scan._id })">View hosts</md-button>
+  </md-card-actions>
 </md-card>
 
 <md-card>

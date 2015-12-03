@@ -7,15 +7,17 @@ function restCollectionTransform (data, headersGetter) {
 angular.module('obgs')
 .factory('Host', ['$resource',
     function($resource) {
-        return $resource('api/hosts/:id', null, {
+        return $resource('api/scans/:scan_id/hosts/:id', {
+            'scan_id': '@scan_id'
+        }, {
             'get': { method: 'GET' },
             'query': { method: 'GET', isArray: true, transformResponse: restCollectionTransform }
         });
     }
 ])
-.controller('HostListCtrl', ['$scope', 'Host',
-    function($scope, Host) {
-        $scope.hosts = Host.query();
+.controller('HostListCtrl', ['$scope', '$stateParams', 'Host',
+    function($scope, $stateParams, Host) {
+        $scope.hosts = Host.query($stateParams);
         $scope.filter = {};
 
         // /api/hosts?where={"ports.service.name":"X509"}

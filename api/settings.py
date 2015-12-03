@@ -29,6 +29,7 @@ hosts = {
     # 'title' tag used in item links. Defaults to the resource title minus
     # the final, plural 's' (works fine in most cases but not for 'people')
     'item_title': 'host',
+    'url': 'scans/<regex("[a-f0-9]{24}"):scan_id>/hosts',
 
     # by default the standard item entry point is defined as
     # '/people/<ObjectId>'. We leave it untouched, and we also enable an

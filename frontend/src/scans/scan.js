@@ -32,3 +32,8 @@ angular.module('obgs')
         }
     }
 ])
+.controller('ScanDetailsCtrl', ['$scope', '$stateParams', 'Scan',
+    function($scope, $stateParams, Scan) {
+        $scope.scan = Scan.get($stateParams);
+    }
+])

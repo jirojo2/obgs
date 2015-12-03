@@ -27,15 +27,20 @@ app.config(['$stateProvider', '$urlRouterProvider',
                 templateUrl: "dashboard.html",
                 controller: "DashboardCtrl"
             })
-            .state('hosts', {
-                url: "/hosts",
-                templateUrl: "hosts/list.html",
-                controller: "HostListCtrl"
-            })
             .state('scans', {
                 url: "/scans",
                 templateUrl: "scans/list.html",
                 controller: "ScanListCtrl"
+            })
+            .state('scan', {
+                url: "/scan/:scan_id",
+                templateUrl: "scans/details.html",
+                controller: "ScanDetailsCtrl"
+            })
+            .state('scan.hosts', {
+                url: "/hosts",
+                templateUrl: "hosts/list.html",
+                controller: "HostListCtrl"
             })
     }
 ])

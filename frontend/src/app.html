@@ -31,32 +31,20 @@
 
   <body ng-app="obgs" layout="column" ng-cloak>
     <md-toolbar md-scroll-shrink>
-      <div class="md-toolbar-tools">Open Banner Grabbing System</div>
+      <div class="md-toolbar-tools">
+        Open Banner Grabbing System
+        <span flex></span>
+        <md-button class="md-icon-button" aria-label="More" ui-sref="scans">
+          <md-tooltip md-direction="left">
+            Scans
+          </md-tooltip>
+          <md-icon md-font-icon="fa-search" class="fa"></md-icon>
+        </md-button>
+      </div>
     </md-toolbar>
 
     <section flex layout="row">
-      <md-sidenav class="site-sidenav md-sidenav-left md-whiteframe-z2"
-                  md-component-id="left"
-                  md-is-locked-open="$mdMedia('gt-sm')">
-        <md-list>
-          <md-list-item>
-            <md-button ui-sref-active="md-raised" ui-sref="dashboard" flex>Overview</md-button>
-          </md-list-item>
-          <md-list-item>
-            <md-button ui-sref-active="md-raised" ui-sref="hosts" flex>Hosts</md-button>
-          </md-list-item>
-          <md-list-item>
-            <md-button ui-sref-active="md-raised" ui-sref="scans" flex>Scans</md-button>
-          </md-list-item>
-          <md-list-item>
-            <md-button ui-sref-active="md-raised" ui-sref="help" flex>Help</md-button>
-          </md-list-item>
-        </md-list>
-
-      </md-sidenav>
-
       <md-content flex layout-padding ui-view></md-content>
-
     </section>
 
     <!-- Bootstrap core JavaScript
