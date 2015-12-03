@@ -69,7 +69,7 @@ def processScan(scan):
     p = Popen([ 'masscan',
                 '--banners',
                 '-oJ', '/tmp/tmpscan.json',
-                '-p', '22,80,443',
+                '-p', scan['ports'],
                 '--source-port', '60000', # TODO: config this as settings
                 scan['target']], stdout=PIPE, stderr=PIPE)
     with p.stderr:

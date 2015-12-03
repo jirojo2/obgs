@@ -20,7 +20,9 @@ angular.module('obgs')
             tstamp: new Date(),
             finished: false,
             launched: false,
-            ports: '22,80,443'
+            remaining: "",
+            found: 0,
+            ports: '21,22,25,80,110,139,443,445,548,3306,3389,8080,8443'
         });
 
         $scope.launchScan = function(scan) {
