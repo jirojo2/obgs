@@ -7,6 +7,7 @@ import time
 import sys
 import re
 
+from copy import deepcopy
 from pymongo import MongoClient
 from subprocess import Popen, PIPE
 from datetime import datetime
@@ -31,18 +32,33 @@ def processScanResult(scan, stream):
     for line in iter(stream.readline, b''):
         try:
             # {   "ip": "192.168.1.114",   "ports": [ {"port": 80, "proto": "tcp", "status": "open", "reason": "syn-ack", "ttl": 63} ] },
-            if 'ip' not in line:
+            if 'finished' in line:
+                stats = json.loads(line)
+                scan['elapsed'] = stats['elapsed']
+                scan['found'] = stats['up']
                 continue
-            host = json.loads(line[:-2])
-            host['tstamp'] = datetime.utcnow()
-            host['scan_id'] = scan['_id']
-            h = mongo.obgs.hosts.find_one({"scan_id": host['scan_id'], "ip": host['ip']})
-            if h is not None:
-                mongo.obgs.hosts.update_one({"_id": h['_id']}, {"$push": {"ports": {"$each": host['ports']}}})
-            else:
-                mongo.obgs.hosts.replace_one({"scan_id": host['scan_id'], "ip": host['ip']}, host, True)
+            elif 'ip' not in line:
+                continue
+            parsed = json.loads(line[:-2])
+            parsed['tstamp'] = datetime.utcnow()
+            parsed['scan_id'] = scan['_id']
+            host = mongo.obgs.hosts.find_one({"scan_id": parsed['scan_id'], "ip": parsed['ip']})
+            if host is None:
+                host = deepcopy(parsed)
+            for p in parsed['ports']:
+                port = next((x for x in host['ports'] if p['port'] == x['port']), None)
+                service = p.pop('service', None)
+                if port is None:
+                    host['ports'].append(p)
+                elif service is None:
+                    pass
+                else:
+                    if 'services' not in port:
+                        port['services'] = []
+                    port['services'].append(service)
+            mongo.obgs.hosts.replace_one({"scan_id": parsed['scan_id'], "ip": parsed['ip']}, host, True)
         except Exception as e:
-            logger.error(e)
+            logger.error("%s %s" % (type(e), e))
 
 def processScan(scan):
     """
@@ -67,7 +83,7 @@ def processScan(scan):
                 # process line
                 m = reProgress.search(line)
                 if m is not None:
-                    logger.info('percentage found! %s%% done, %s remaining, %s found' % (m.group(1), m.group(2), m.group(3)))
+                    logger.info('\tscan %s %s%% done, %s remaining, %s found' % (scan['_id'], m.group(1), m.group(2), m.group(3)))
                     # update scan status
                     scan['progress'] = float(m.group(1))
                     scan['remaining'] = m.group(2)
@@ -79,9 +95,8 @@ def processScan(scan):
                     dirty = scan['remaining'] != m.group(2)
                     scan['progress'] = float(m.group(1))
                     scan['remaining'] = m.group(2)
-                    scan['found'] = int(m.group(3))
                     if dirty:
-                        logger.info('waiting found! %s%% done, waiting %s' % (m.group(1), m.group(2)))
+                        logger.info('\tscan %s %s%% done, waiting %s' % (scan['_id'], m.group(1), m.group(2)))
                         mongo.obgs.scans.update_one({"_id": scan['_id']}, {"$set": {"progress": scan['progress'], "remaining": scan['remaining'], "found": scan['found']}})
                 line = ''
             else:
@@ -90,11 +105,12 @@ def processScan(scan):
 
     code = p.returncode
     if code is 0:
-        print("Completed scan")
+        logger.info("Completed scan, processing results...")
         with open('/tmp/tmpscan.json', 'r') as f:
             processScanResult(scan, f)
+        logger.info("Results processed correctly")
     else:
-        print("Error in scan with code %d" % code)
+        logger.error("Error in scan with code %d" % code)
         scan['error'] = True
     scan['finished'] = True
     mongo.obgs.scans.update_one({"_id": scan['_id']}, {"$set": {"finished": scan['finished'], "error": scan['error']}})
@@ -148,7 +164,7 @@ def main():
     # loop!
     while True:
         processQueue('scans')
-        time.sleep(10)
+        time.sleep(2)
 
 if __name__ == "__main__":
     main()
